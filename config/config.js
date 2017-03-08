@@ -1,8 +1,8 @@
 var path = require('path');
 var rootPath = path.normalize(__dirname + '/..');
-var env = process.env.NODE_ENV || 'production';
+var env = process.env.NODE_ENV || 'development';
 var server_port = process.env.PORT || 8080;
-var server_ip_address = process.env.IP || 127.0.0.1;
+var server_ip_address = process.env.IP || '0.0.0.0';
 
 var config = {
   development: {
