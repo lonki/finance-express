@@ -24,7 +24,7 @@ Get free finance data~
    - *npm install*
 
  - Develop
-   - *gulp*
+   - *npm run local*
 
- - Build
-   - todo~
+ - Production
+   - *npm run prod*
