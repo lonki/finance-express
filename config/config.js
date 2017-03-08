@@ -8,7 +8,7 @@ var config = {
     app: {
       name: 'crawler-express'
     },
-    port: process.env.PORT || 3000,
+    port: process.env.PORT || 80,
   },
 
   test: {
@@ -16,7 +16,7 @@ var config = {
     app: {
       name: 'crawler-express'
     },
-    port: process.env.PORT || 3000,
+    port: process.env.PORT || 80,
   },
 
   production: {
@@ -24,7 +24,7 @@ var config = {
     app: {
       name: 'crawler-express'
     },
-    port: process.env.PORT || 3000,
+    port: process.env.PORT || 80,
   }
 };
 
