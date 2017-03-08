@@ -16,12 +16,18 @@ function loadMops(req, res, next) {
 router.get('/mops', loadMops, function(req, res) {
   var stockId = req.query.stockId;
   var year = req.query.year;
+  var type = req.query.type;
   var json = req.json;
   var fileName = 'mops_' + stockId + '_' + year + '.csv';
 
-  res.setHeader('Content-disposition', 'attachment; filename=' + fileName);
-  res.set('Content-Type', 'text/csv');
-  res.csvbig5(json);
+  if (type === 'j') {
+    res.json(json);
+  } else {
+    res.setHeader('Content-disposition', 'attachment; filename=' + fileName);
+    res.set('Content-Type', 'text/csv');
+    res.csvbig5(json);
+  }
+
 });
 
 module.exports = function (app) {
