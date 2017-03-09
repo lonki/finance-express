@@ -1,7 +1,7 @@
 var express = require('express'),
   router = express.Router(),
   ParseTWSE = require('../models/parseTWSE'),
-  csvbig5 = require('express-csv-big5');
+  csv = require('express-csv');
 
 function loadMops(req, res, next) {
   var stockId = req.query.stockId;
@@ -25,7 +25,7 @@ router.get('/mops', loadMops, function(req, res) {
   } else {
     res.setHeader('Content-disposition', 'attachment; filename=' + fileName);
     res.set('Content-Type', 'text/csv');
-    res.csvbig5(json);
+    res.csv(json);
   }
 
 });
