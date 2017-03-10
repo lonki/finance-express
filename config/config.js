@@ -1,7 +1,8 @@
 var path = require('path');
 var rootPath = path.normalize(__dirname + '/..');
 var env = process.env.NODE_ENV || 'development';
-var port = process.env.PORT || 8080;
+var server_port = process.env.PORT || 8080;
+var server_ip_address = process.env.IP || '0.0.0.0';
 
 var config = {
   development: {
@@ -9,7 +10,8 @@ var config = {
     app: {
       name: 'crawler-express'
     },
-    port: port
+    port: server_port,
+    ip: server_ip_address
   },
 
   test: {
@@ -17,7 +19,8 @@ var config = {
     app: {
       name: 'crawler-express'
     },
-    port: port
+    port: server_port,
+    ip: server_ip_address
   },
 
   production: {
@@ -25,7 +28,8 @@ var config = {
     app: {
       name: 'crawler-express'
     },
-    port: port
+    port: server_port,
+    ip: server_ip_address
   }
 };
 

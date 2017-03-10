@@ -51,8 +51,8 @@
       "command": "node app.js",
       "env": {
         "NODE_ENV": "production",
-        "PORT": 80,
-        "IP": "127.0.0.1"
+        "PORT": 8080,
+        "IP": "0.0.0.0"
       }
     }
   }
