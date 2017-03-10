@@ -3,10 +3,10 @@ var url = require('url');
 var tabletojson = require('tabletojson');
 
 function processTableHtml($, table) {
-  return processTableHtml($,table,0);
+  return processTableHtmlHeaderShift($,table,0);
 }
 
-function processTableHtml($, table, headershiftNum) {
+function processTableHtmlHeaderShift($, table, headershiftNum) {
   let target = 0;
   let shiftNum = parseInt(headershiftNum);
   table.find("tr").each(function(i, item) {
@@ -163,7 +163,7 @@ module.exports = function() {
           }else{
             var $ = res.$;
             var table = $("table").eq(2);
-            table = processTableHtml($, table,1).html();
+            table = processTableHtmlHeaderShift($, table,1).html();
             var tableHtml = '<table>' + table.replace(/\<th/g,"<td").replace(/\<\/th>/g,"</td>") + '</table>';
             var json = tabletojson.convert(tableHtml.toString());
             req.json = json[0];
@@ -211,7 +211,7 @@ module.exports = function() {
           }else{
             var $ = res.$;
             var table = $("table").eq(2);
-            table = processTableHtml($, table, 1).html();
+            table = processTableHtmlHeaderShift($, table, 1).html();
             var tableHtml = '<table>' + table.replace(/\<th/g,"<td").replace(/\<\/th>/g,"</td>") + '</table>';
             var json = tabletojson.convert(tableHtml.toString());
             req.json = json[0];
@@ -259,7 +259,7 @@ module.exports = function() {
           }else{
             var $ = res.$;
             var table = $("table").eq(2);
-            table = processTableHtml($, table, 1).html();
+            table = processTableHtmlHeaderShift($, table, 1).html();
             var tableHtml = '<table>' + table.replace(/\<th/g,"<td").replace(/\<\/th>/g,"</td>") + '</table>';
             var json = tabletojson.convert(tableHtml.toString());
             req.json = json[0];
