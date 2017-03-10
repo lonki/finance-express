@@ -2,6 +2,24 @@ var Crawler = require("crawler");
 var url = require('url');
 var tabletojson = require('tabletojson');
 
+function processTableHtml($, table) {
+  let target = 0;
+  table.find("tr").each(function(i, item) {
+    if(i > 0) {
+      var _th = $(item).find("th");
+      if(typeof _th.attr("rowspan") != "undefined"){
+        target = parseInt(_th.attr("rowspan")) - 1;
+        return;
+      }
+      if (target > 0) {
+        $(item).prepend('<td></td>');
+        target--;
+      }
+    }
+  });
+  return table;
+}
+
 module.exports = function() {
     this.c = new Crawler({
       maxConnections : 10
@@ -44,16 +62,7 @@ module.exports = function() {
           }else{
             var $ = res.$;
             var table = $("table.hasBorder");
-            table.find("tr").each(function(i, item) {
-              if(i > 0) {
-                var _th = $(item).find("th");
-                if (_th.length == 1) {
-                  $(item).prepend('<td></td>');
-                }
-              }
-            });
-
-            table = table.html();
+            table = processTableHtml($, table).html();
             var tableHtml = '<table>' + table.replace(/\<th/g,"<td").replace(/\<\/th>/g,"</td>") + '</table>';
             var json = tabletojson.convert(tableHtml.toString());
             req.json = json[0];
@@ -63,7 +72,7 @@ module.exports = function() {
         }
       }]);
     };
-    
+
     // 財務分析表
     // http://mops.twse.com.tw/mops/web/ajax_t05st22
     this.getFinancial = function(stockId, year, next, req) {
@@ -98,25 +107,8 @@ module.exports = function() {
           if(error){
           }else{
             var $ = res.$;
-
             var table = $("table").eq(3);
-            let target = 0;
-            table.find("tr").each(function(i, item) {
-              if(i > 0) {
-                var _th = $(item).find("th");
-                if(typeof _th.attr("rowspan") != "undefined"){
-                  target = parseInt(_th.attr("rowspan")) - 1;
-                  return;
-                }
-                if (target > 0) {
-                  $(item).prepend('<td></td>');
-                  target--;
-                }
-              }
-            });
-            
-
-            table = table.html();
+            table = processTableHtml($, table).html();
             var tableHtml = '<table>' + table.replace(/\<th/g,"<td").replace(/\<\/th>/g,"</td>") + '</table>';
             var json = tabletojson.convert(tableHtml.toString());
             req.json = json[0];

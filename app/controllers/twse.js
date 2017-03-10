@@ -49,7 +49,7 @@ router.get('/mops/financial', loadFinancial, function(req, res) {
   } else {
     res.setHeader('Content-disposition', 'attachment; filename=' + fileName);
     res.set('Content-Type', 'text/csv');
-    res.csvbig5(json);
+    res.csv(json);
   }
 });
 
