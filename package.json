@@ -34,7 +34,7 @@
     "supertest": "^2.0.0"
   },
   "scripts": {
-    "start": "node app.js",
+    "start": "node ./node_modules/better-npm-run production",
     "local": "node ./node_modules/better-npm-run local",
     "prod": "node ./node_modules/better-npm-run production"
   },
