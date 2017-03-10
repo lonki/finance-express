@@ -1,5 +1,5 @@
 module.exports = function () {
-  const Settings = {
+  var Settings = {
     MOPS: {
       url: 'http://mops.twse.com.tw/mops/web/ajax_t163sb08',
       formData: {
@@ -102,7 +102,7 @@ module.exports = function () {
   }
 
   this.getTwseAPI = function (type, req){
-    const formData = merge_options(Settings[type].formData, req)
+    var formData = merge_options(Settings[type].formData, req)
     return Object.assign(Settings[type], { formData });
   }
 };

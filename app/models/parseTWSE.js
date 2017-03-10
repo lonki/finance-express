@@ -4,8 +4,8 @@ var tabletojson = require('tabletojson');
 var TwseAPI = require('../services/twseAPI');
 
 function processTableHtmlToJson($, table) {
-  let _th_rowspan_number = 0;
-  let _th_colspan_number = 0;
+  var _th_rowspan_number = 0;
+  var _th_colspan_number = 0;
   table.find("tr").each(function(i, item) {
     if(i > 0) {
       var _td = $(item).find("td");
@@ -33,8 +33,8 @@ function processTableHtmlToJson($, table) {
   });
 
   table = table.html();
-  const tableHtml = '<table>' + table.replace(/\<th/g,"<td").replace(/\<\/th>/g,"</td>") + '</table>';
-  const json = tabletojson.convert(tableHtml.toString());
+  var tableHtml = '<table>' + table.replace(/\<th/g,"<td").replace(/\<\/th>/g,"</td>") + '</table>';
+  var json = tabletojson.convert(tableHtml.toString());
 
   return json[0];
 }
@@ -51,11 +51,11 @@ module.exports = function() {
       http://mops.twse.com.tw/mops/web/t163sb08
     */
     this.getMOPS = function(co_id, year, next, req) {
-      const query = {
+      var query = {
         co_id,
         year,
       };
-      const mopsAPI = this.TwseAPI.getTwseAPI('MOPS', query);
+      var mopsAPI = this.TwseAPI.getTwseAPI('MOPS', query);
 
       this.c.queue([{
         uri: mopsAPI.url,
@@ -85,11 +85,11 @@ module.exports = function() {
     // 財務分析表
     // http://mops.twse.com.tw/mops/web/ajax_t05st22
     this.getFinancial = function(co_id, year, next, req) {
-      const query = {
+      var query = {
         co_id,
         year,
       };
-      const FinancialAPI = this.TwseAPI.getTwseAPI('Financial', query);
+      var FinancialAPI = this.TwseAPI.getTwseAPI('Financial', query);
 
       this.c.queue([{
         uri: FinancialAPI.url,
@@ -120,11 +120,11 @@ module.exports = function() {
     // 毛利率
     // http://mops.twse.com.tw/mops/web/ajax_t163sb09
     this.getGrossProfit = function(co_id, year, next, req) {
-      const query = {
+      var query = {
         co_id,
         year,
       };
-      const grossProfitAPI = this.TwseAPI.getTwseAPI('GrossProfit', query);
+      var grossProfitAPI = this.TwseAPI.getTwseAPI('GrossProfit', query);
 
       this.c.queue([{
         uri: grossProfitAPI.url,
@@ -155,11 +155,11 @@ module.exports = function() {
     // 存貨週轉率
     // http://mops.twse.com.tw/mops/web/ajax_t05st25
     this.getInventory = function(co_id, year, next, req) {
-      const query = {
+      var query = {
         co_id,
         year,
       };
-      const inventoryAPI = this.TwseAPI.getTwseAPI('Inventory', query);
+      var inventoryAPI = this.TwseAPI.getTwseAPI('Inventory', query);
 
       this.c.queue([{
         uri: inventoryAPI.url,
@@ -190,11 +190,11 @@ module.exports = function() {
     //應收帳款週轉率
     //http://mops.twse.com.tw/mops/web/ajax_t05st26
     this.getAverageCollection = function(co_id, year, next, req) {
-      const query = {
+      var query = {
         co_id,
         year,
       };
-      const averageCollectionAPI = this.TwseAPI.getTwseAPI('AverageCollection', query);
+      var averageCollectionAPI = this.TwseAPI.getTwseAPI('AverageCollection', query);
 
       this.c.queue([{
         uri: averageCollectionAPI.url,
