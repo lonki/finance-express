@@ -17,6 +17,20 @@ function loadFinancial(req, res, next) {
   TWSE.getFinancial(stockId, year, next, req);
 }
 
+function loadGrossProfit(req, res, next) {
+  var stockId = req.query.stockId;
+  var year = req.query.year;
+  var TWSE = new ParseTWSE();
+  TWSE.getGrossProfit(stockId, year, next, req);
+}
+
+function loadInventory(req, res, next) {
+  var stockId = req.query.stockId;
+  var year = req.query.year;
+  var TWSE = new ParseTWSE();
+  TWSE.getInventory(stockId, year, next, req);
+}
+
 /*
   /twse/mops
 */
@@ -43,6 +57,54 @@ router.get('/mops/financial', loadFinancial, function(req, res) {
   var type = req.query.type;
   var json = req.json;
   var fileName = 'mops_financial_' + stockId + '_' + year + '.csv';
+
+  if (type === 'j') {
+    res.json(json);
+  } else {
+    res.setHeader('Content-disposition', 'attachment; filename=' + fileName);
+    res.set('Content-Type', 'text/csv');
+    res.csv(json);
+  }
+});
+
+router.get('/mops/grossProfit', loadGrossProfit, function(req, res) {
+  var stockId = req.query.stockId;
+  var year = req.query.year;
+  var type = req.query.type;
+  var json = req.json;
+  var fileName = 'mops_grossProfit_' + stockId + '_' + year + '.csv';
+
+  if (type === 'j') {
+    res.json(json);
+  } else {
+    res.setHeader('Content-disposition', 'attachment; filename=' + fileName);
+    res.set('Content-Type', 'text/csv');
+    res.csv(json);
+  }
+});
+
+router.get('/mops/inventoryTurnover', loadInventory, function(req, res) {
+  var stockId = req.query.stockId;
+  var year = req.query.year;
+  var type = req.query.type;
+  var json = req.json;
+  var fileName = 'mops_inventory_' + stockId + '_' + year + '.csv';
+
+  if (type === 'j') {
+    res.json(json);
+  } else {
+    res.setHeader('Content-disposition', 'attachment; filename=' + fileName);
+    res.set('Content-Type', 'text/csv');
+    res.csv(json);
+  }
+});
+
+router.get('/mops/averageCollectionTurnover', loadInventory, function(req, res) {
+  var stockId = req.query.stockId;
+  var year = req.query.year;
+  var type = req.query.type;
+  var json = req.json;
+  var fileName = 'mops_average_collection_' + stockId + '_' + year + '.csv';
 
   if (type === 'j') {
     res.json(json);
