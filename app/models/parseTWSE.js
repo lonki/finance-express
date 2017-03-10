@@ -224,7 +224,7 @@ module.exports = function() {
 
     //應收帳款週轉率
     //http://mops.twse.com.tw/mops/web/ajax_t05st26
-    this.getInventory = function(stockId, year, next, req) {
+    this.getAverageCollection = function(stockId, year, next, req) {
       const url = 'http://mops.twse.com.tw/mops/web/ajax_t05st26';
       const data = {
         encodeURIComponent:1,

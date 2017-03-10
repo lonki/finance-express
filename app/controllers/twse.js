@@ -31,6 +31,13 @@ function loadInventory(req, res, next) {
   TWSE.getInventory(stockId, year, next, req);
 }
 
+function loadAverageCollection(req, res, next) {
+  var stockId = req.query.stockId;
+  var year = req.query.year;
+  var TWSE = new ParseTWSE();
+  TWSE.getAverageCollection(stockId, year, next, req);
+}
+
 /*
   /twse/mops
 */
@@ -99,7 +106,7 @@ router.get('/mops/inventoryTurnover', loadInventory, function(req, res) {
   }
 });
 
-router.get('/mops/averageCollectionTurnover', loadInventory, function(req, res) {
+router.get('/mops/averageCollectionTurnover', loadAverageCollection, function(req, res) {
   var stockId = req.query.stockId;
   var year = req.query.year;
   var type = req.query.type;
