@@ -1,7 +1,8 @@
 var express = require('express'),
   router = express.Router(),
   ParseTWSE = require('../models/parseTWSE'),
-  csv = require('express-csv');
+  csv = require('express-csv'),
+  csvbig5 = require('express-csv-big5');
 
 function loadMops(req, res, next) {
   var stockId = req.query.stockId;
@@ -50,6 +51,10 @@ router.get('/mops', loadMops, function(req, res) {
 
   if (type === 'j') {
     res.json(json);
+  } else if (type === 'big5') {
+    res.setHeader('Content-disposition', 'attachment; filename=' + fileName);
+    res.set('Content-Type', 'text/csv');
+    res.csvbig5(json);
   } else {
     res.setHeader('Content-disposition', 'attachment; filename=' + fileName);
     res.set('Content-Type', 'text/csv');
@@ -67,6 +72,10 @@ router.get('/mops/financial', loadFinancial, function(req, res) {
 
   if (type === 'j') {
     res.json(json);
+  } else if (type === 'big5') {
+    res.setHeader('Content-disposition', 'attachment; filename=' + fileName);
+    res.set('Content-Type', 'text/csv');
+    res.csvbig5(json);
   } else {
     res.setHeader('Content-disposition', 'attachment; filename=' + fileName);
     res.set('Content-Type', 'text/csv');
@@ -83,6 +92,10 @@ router.get('/mops/grossProfit', loadGrossProfit, function(req, res) {
 
   if (type === 'j') {
     res.json(json);
+  } else if (type === 'big5') {
+    res.setHeader('Content-disposition', 'attachment; filename=' + fileName);
+    res.set('Content-Type', 'text/csv');
+    res.csvbig5(json);
   } else {
     res.setHeader('Content-disposition', 'attachment; filename=' + fileName);
     res.set('Content-Type', 'text/csv');
@@ -99,6 +112,10 @@ router.get('/mops/inventoryTurnover', loadInventory, function(req, res) {
 
   if (type === 'j') {
     res.json(json);
+  } else if (type === 'big5') {
+    res.setHeader('Content-disposition', 'attachment; filename=' + fileName);
+    res.set('Content-Type', 'text/csv');
+    res.csvbig5(json);
   } else {
     res.setHeader('Content-disposition', 'attachment; filename=' + fileName);
     res.set('Content-Type', 'text/csv');
@@ -115,6 +132,10 @@ router.get('/mops/averageCollectionTurnover', loadAverageCollection, function(re
 
   if (type === 'j') {
     res.json(json);
+  } else if (type === 'big5') {
+    res.setHeader('Content-disposition', 'attachment; filename=' + fileName);
+    res.set('Content-Type', 'text/csv');
+    res.csvbig5(json);
   } else {
     res.setHeader('Content-disposition', 'attachment; filename=' + fileName);
     res.set('Content-Type', 'text/csv');
