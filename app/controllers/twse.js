@@ -7,15 +7,17 @@ var express = require('express'),
 function loadMops(req, res, next) {
   var stockId = req.query.stockId;
   var year = req.query.year;
+  var TYPEK = req.query.TYPEK;
   var TWSE = new ParseTWSE();
-  TWSE.getMOPS(stockId, year, next, req);
+  TWSE.getMOPS(stockId, year, TYPEK, next, req);
 }
 
 function loadFinancial(req, res, next) {
   var stockId = req.query.stockId;
   var year = req.query.year;
+  var TYPEK = req.query.TYPEK;
   var TWSE = new ParseTWSE();
-  TWSE.getFinancial(stockId, year, next, req);
+  TWSE.getFinancial(stockId, year, TYPEK, next, req);
 }
 
 function loadGrossProfit(req, res, next) {

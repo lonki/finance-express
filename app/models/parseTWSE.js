@@ -52,10 +52,12 @@ module.exports = function() {
       營益分析表
       http://mops.twse.com.tw/mops/web/t163sb08
     */
-    this.getMOPS = function(co_id, year, next, req) {
+    this.getMOPS = function(co_id, year, TYPEK, next, req) {
+      TYPEK = (TYPEK)? TYPEK: 'sii';
       var query = {
         co_id,
         year,
+        TYPEK,
       };
       var mopsAPI = this.TwseAPI.getTwseAPI('MOPS', query);
 
@@ -86,10 +88,12 @@ module.exports = function() {
 
     // 財務分析表
     // http://mops.twse.com.tw/mops/web/ajax_t05st22
-    this.getFinancial = function(co_id, year, next, req) {
+    this.getFinancial = function(co_id, year, TYPEK, next, req) {
+      TYPEK = (TYPEK)? TYPEK: 'sii';
       var query = {
         co_id,
         year,
+        TYPEK,
       };
       var FinancialAPI = this.TwseAPI.getTwseAPI('Financial', query);
 
