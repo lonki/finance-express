@@ -4,19 +4,14 @@ module.exports = function () {
       url: 'http://mops.twse.com.tw/mops/web/ajax_t163sb08',
       formData: {
         encodeURIComponent : 1,
+        run: 'Y',
         step : 1,
+        TYPEK : 'sii',
+        isnew : false,
         firstin : 1,
         off : 1,
         keyword4 : '',
-        code1 : '',
-        TYPEK2 : '',
-        checkbtn : '',
-        queryName : 'co_id',
-        t05st29_c_ifrs :'N',
-        t05st30_c_ifrs : 'N',
-        inpuType : 'co_id',
-        TYPEK : 'sii',
-        isnew : false
+        ifrs: 'Y',
       }
     },
     Financial: {
@@ -28,7 +23,8 @@ module.exports = function () {
         TYPEK: 'sii',
         firstin: 1,
         off: 1,
-        isnew : 'false',
+        isnew : false,
+        ifrs: 'Y',
       }
     },
     GrossProfit: {

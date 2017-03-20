@@ -33,6 +33,8 @@ function processTableHtmlToJson($, table) {
   });
 
   table = table.html();
+  table = (table) ? table: '';
+
   var tableHtml = '<table>' + table.replace(/\<th/g,"<td").replace(/\<\/th>/g,"</td>") + '</table>';
   var json = tabletojson.convert(tableHtml.toString());
 
