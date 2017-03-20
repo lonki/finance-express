@@ -15,8 +15,8 @@ module.exports = function () {
         t05st29_c_ifrs :'N',
         t05st30_c_ifrs : 'N',
         inpuType : 'co_id',
-        TYPEK : 'all',
-        isnew : true
+        TYPEK : 'sii',
+        isnew : false
       }
     },
     Financial: {
