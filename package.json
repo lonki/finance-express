@@ -4,6 +4,10 @@
   "private": true,
   "main": "app.js",
   "dependencies": {
+    "app-module-path": "^2.2.0",
+    "babel-core": "^6.24.0",
+    "babel-preset-es2015": "^6.24.0",
+    "babel-preset-stage-0": "^6.22.0",
     "better-npm-run": "0.0.14",
     "body-parser": "^1.13.3",
     "compression": "^1.5.2",
@@ -20,6 +24,7 @@
     "method-override": "^2.3.0",
     "morgan": "^1.6.1",
     "serve-favicon": "^2.3.0",
+    "supervisor": "^0.12.0",
     "tabletojson": "^0.4.0"
   },
   "devDependencies": {
@@ -34,13 +39,13 @@
     "supertest": "^2.0.0"
   },
   "scripts": {
-    "start": "node app.js",
+    "start": "node ./server/server.start.js",
     "local": "node ./node_modules/better-npm-run local",
     "prod": "node ./node_modules/better-npm-run production"
   },
   "betterScripts": {
     "local": {
-      "command": "gulp",
+      "command": "node ./node_modules/supervisor/lib/cli-wrapper.js -w ./server ./server/server.start.js",
       "env": {
         "NODE_ENV": "development",
         "PORT": 3005,
@@ -48,7 +53,7 @@
       }
     },
     "production": {
-      "command": "node app.js",
+      "command": "node ./server/server.start.js",
       "env": {
         "NODE_ENV": "production",
         "PORT": 8080,
