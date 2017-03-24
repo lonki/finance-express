@@ -15,6 +15,7 @@ module.exports = function(app, config) {
 
   app.set('views', config.root + 'client/views');
   app.set('view engine', 'ejs');
+  app.set('json spaces', 2);
 
   // app.use(favicon(config.root + '/public/img/favicon.ico'));
   app.use(logger('dev'));
