@@ -12,4 +12,7 @@ try {
   console.error(err);
 }
 
+global.Promise = require('bluebird');
+
+require("babel-polyfill");
 require('babel-core/register')(config);

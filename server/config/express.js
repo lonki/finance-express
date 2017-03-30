@@ -59,5 +59,13 @@ module.exports = function(app, config) {
       });
   });
 
+  // handle all uncaught exceptions
+  // see - https://nodejs.org/api/process.html#process_event_uncaughtexception
+  process.on('uncaughtException', err => console.error('uncaught exception:', err));
+  // handle all unhandled promise rejections
+  // see - http://bluebirdjs.com/docs/api/error-management-configuration.html#global-rejection-events
+  // or for latest node - https://nodejs.org/api/process.html#process_event_unhandledrejection
+  process.on('unhandledRejection', error => console.error('unhandled rejection:', error));
+
   return app;
 };

@@ -52,179 +52,171 @@ module.exports = function() {
       營益分析表
       http://mops.twse.com.tw/mops/web/t163sb08
     */
-    this.getMOPS = function(co_id, year, TYPEK, next, req) {
+    this.getMOPS = function(co_id, year, TYPEK) {
       TYPEK = (TYPEK)? TYPEK: 'sii';
-      var query = {
+      const query = {
         co_id,
         year,
         TYPEK,
       };
-      var mopsAPI = this.TwseAPI.getTwseAPI('MOPS', query);
+      const mopsAPI = this.TwseAPI.getTwseAPI('MOPS', query);
 
-      this.c.queue([{
-        uri: mopsAPI.url,
-        method: 'POST',
-        headers: {
-          'content-type': 'application/x-www-form-urlencoded'
-        },
-        form: mopsAPI.formData,
-        callback: function (error, res, done) {
+      return new Promise(r => {
+        this.c.queue([{
+          uri: mopsAPI.url,
+          method: 'POST',
+          headers: {
+            'content-type': 'application/x-www-form-urlencoded'
+          },
+          form: mopsAPI.formData,
+          callback: function (error, res, done) {
+            let json = {};
 
-          if (!error) {
-            try {
-              var $ = res.$;
-              var table = $("table.hasBorder");
-              req.json = processTableHtmlToJson($, table);
-            } catch(err) {
-              req.json = {};
-              throw new Error("mopsAPI failed: " + err);
+            if (!error) {
+              const $ = res.$;
+              const table = $("table.hasBorder");
+              json = processTableHtmlToJson($, table);
             }
+
+            done();
+            r(json);
           }
-          done();
-          next();
-        }
-      }]);
+        }]);
+      });
     };
 
     // 財務分析表
     // http://mops.twse.com.tw/mops/web/ajax_t05st22
-    this.getFinancial = function(co_id, year, TYPEK, next, req) {
+    this.getFinancial = function(co_id, year, TYPEK) {
       TYPEK = (TYPEK)? TYPEK: 'sii';
-      var query = {
+      const query = {
         co_id,
         year,
         TYPEK,
       };
-      var FinancialAPI = this.TwseAPI.getTwseAPI('Financial', query);
+      const FinancialAPI = this.TwseAPI.getTwseAPI('Financial', query);
 
-      this.c.queue([{
-        uri: FinancialAPI.url,
-        method: 'POST',
-        headers: {
-          'content-type': 'application/x-www-form-urlencoded'
-        },
-        form: FinancialAPI.formData,
-        callback: function (error, res, done) {
+      return new Promise(r => {
+        this.c.queue([{
+          uri: FinancialAPI.url,
+          method: 'POST',
+          headers: {
+            'content-type': 'application/x-www-form-urlencoded'
+          },
+          form: FinancialAPI.formData,
+          callback: function (error, res, done) {
+            let json = {};
 
-          if (!error) {
-            try {
-              var $ = res.$;
-              var tableLength = $("table").length;
-              var table = $("table").eq(tableLength - 1);
-              req.json = processTableHtmlToJson($, table);
-            } catch(err) {
-              req.json = {};
-              throw new Error("mopsAPI failed: " + err);
+            if (!error) {
+              const $ = res.$;
+              const tableLength = $("table").length;
+              const table = $("table").eq(tableLength - 1);
+              json = processTableHtmlToJson($, table);
             }
+
+            done();
+            r(json);
           }
-          done();
-          next();
-        }
-      }]);
+        }]);
+      });
     };
 
     // 毛利率
     // http://mops.twse.com.tw/mops/web/ajax_t163sb09
-    this.getGrossProfit = function(co_id, year, next, req) {
-      var query = {
+    this.getGrossProfit = function(co_id, year) {
+      const query = {
         co_id,
         year,
       };
-      var grossProfitAPI = this.TwseAPI.getTwseAPI('GrossProfit', query);
+      const grossProfitAPI = this.TwseAPI.getTwseAPI('GrossProfit', query);
 
-      this.c.queue([{
-        uri: grossProfitAPI.url,
-        method: 'POST',
-        headers: {
-          'content-type': 'application/x-www-form-urlencoded'
-        },
-        form: grossProfitAPI.formData,
-        callback: function (error, res, done) {
+      return new Promise(r => {
+        this.c.queue([{
+          uri: grossProfitAPI.url,
+          method: 'POST',
+          headers: {
+            'content-type': 'application/x-www-form-urlencoded'
+          },
+          form: grossProfitAPI.formData,
+          callback: function (error, res, done) {
+            let json = {};
 
-          if (!error) {
-            try {
-              var $ = res.$;
-              var tableLength = $("table").length;
-              var table = $("table").eq(tableLength - 1);
-              req.json = processTableHtmlToJson($, table);
-            } catch(err) {
-              req.json = {};
-              throw new Error("mopsAPI failed: " + err);
+            if (!error) {
+              const $ = res.$;
+              const tableLength = $("table").length;
+              const table = $("table").eq(tableLength - 1);
+              json = processTableHtmlToJson($, table);
             }
+            done();
+            r(json);
           }
-          done();
-          next();
-        }
-      }]);
+        }]);
+      });
     };
 
     // 存貨週轉率
     // http://mops.twse.com.tw/mops/web/ajax_t05st25
-    this.getInventory = function(co_id, year, next, req) {
-      var query = {
+    this.getInventory = function(co_id, year) {
+      const query = {
         co_id,
         year,
       };
-      var inventoryAPI = this.TwseAPI.getTwseAPI('Inventory', query);
+      const inventoryAPI = this.TwseAPI.getTwseAPI('Inventory', query);
 
-      this.c.queue([{
-        uri: inventoryAPI.url,
-        method: 'POST',
-        headers: {
-          'content-type': 'application/x-www-form-urlencoded'
-        },
-        form: inventoryAPI.formData,
-        callback: function (error, res, done) {
+      return new Promise(r => {
+        this.c.queue([{
+          uri: inventoryAPI.url,
+          method: 'POST',
+          headers: {
+            'content-type': 'application/x-www-form-urlencoded'
+          },
+          form: inventoryAPI.formData,
+          callback: function (error, res, done) {
+            let json = {};
 
-          if (!error) {
-            try {
-              var $ = res.$;
-              var tableLength = $("table").length;
-              var table = $("table").eq(tableLength - 1);
-              req.json = processTableHtmlToJson($, table);
-            } catch(err) {
-              req.json = {};
-              throw new Error("mopsAPI failed: " + err);
+            if (!error) {
+              const $ = res.$;
+              const tableLength = $("table").length;
+              const table = $("table").eq(tableLength - 1);
+              json = processTableHtmlToJson($, table);
             }
+            done();
+            r(json);
           }
-          done();
-          next();
-        }
-      }]);
+        }]);
+      });
     };
 
     //應收帳款週轉率
     //http://mops.twse.com.tw/mops/web/ajax_t05st26
-    this.getAverageCollection = function(co_id, year, next, req) {
-      var query = {
+    this.getAverageCollection = function(co_id, year) {
+      const query = {
         co_id,
         year,
       };
-      var averageCollectionAPI = this.TwseAPI.getTwseAPI('AverageCollection', query);
+      const averageCollectionAPI = this.TwseAPI.getTwseAPI('AverageCollection', query);
 
-      this.c.queue([{
-        uri: averageCollectionAPI.url,
-        method: 'POST',
-        headers: {
-          'content-type': 'application/x-www-form-urlencoded'
-        },
-        form: averageCollectionAPI.formData,
-        callback: function (error, res, done) {
+      return new Promise(r => {
+        this.c.queue([{
+          uri: averageCollectionAPI.url,
+          method: 'POST',
+          headers: {
+            'content-type': 'application/x-www-form-urlencoded'
+          },
+          form: averageCollectionAPI.formData,
+          callback: function (error, res, done) {
+            let json = {};
 
-          if (!error) {
-            try {
+            if (!error) {
               var $ = res.$;
               var tableLength = $("table").length;
               var table = $("table").eq(tableLength - 1);
-              req.json = processTableHtmlToJson($, table);
-            } catch(err) {
-              req.json = {};
-              throw new Error("mopsAPI failed: " + err);
+              json = processTableHtmlToJson($, table);
             }
+            done();
+            r(json);
           }
-          done();
-          next();
-        }
-      }]);
+        }]);
+      });
     };
 };
