@@ -50,7 +50,7 @@ const handleStockMonth = async (req, res) => {
     result = result.concat(result, entry);
   });
 
-  const fileName = `stock_${stockId}_${year}_${months}`;
+  const fileName = `stock_${stockId}_${year}_${monthsAry.join('-')}`;
 
   handleResponse(result, res, type, fileName);
 };
