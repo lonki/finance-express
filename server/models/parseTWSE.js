@@ -48,10 +48,9 @@ module.exports = function() {
 
     this.TwseAPI = new TwseAPI();
 
-    /*
-      營益分析表
-      http://mops.twse.com.tw/mops/web/t163sb08
-    */
+    // ************財務報表************
+    // 營益分析表
+    // http://mops.twse.com.tw/mops/web/t163sb08
     this.getMOPS = function(co_id, year, TYPEK) {
       TYPEK = (TYPEK)? TYPEK: 'sii';
       const query = {
@@ -213,6 +212,41 @@ module.exports = function() {
               var table = $("table").eq(tableLength - 1);
               json = processTableHtmlToJson($, table);
             }
+            done();
+            r(json);
+          }
+        }]);
+      });
+    };
+
+    // ************個股************
+    // 營益分析表
+    // http://www.tse.com.tw/ch/trading/exchange/STOCK_DAY/STOCK_DAYMAIN.php
+    this.getStockMonth = function(CO_ID, query_year, query_month) {
+      const query = {
+        query_year,
+        query_month,
+        CO_ID,
+      };
+      const mopsAPI = this.TwseAPI.getTwseAPI('StockMonth', query);
+
+      return new Promise(r => {
+        this.c.queue([{
+          uri: mopsAPI.url,
+          method: 'POST',
+          headers: {
+            'content-type': 'application/x-www-form-urlencoded'
+          },
+          form: mopsAPI.formData,
+          callback: function (error, res, done) {
+            let json = {};
+
+            if (!error) {
+              const $ = res.$;
+              const table = $("table").eq(0);
+              json = processTableHtmlToJson($, table);
+            }
+
             done();
             r(json);
           }

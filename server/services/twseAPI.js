@@ -87,6 +87,12 @@ module.exports = function () {
         TYPEK : 'all',
         isnew : false,
       }
+    },
+    StockMonth: {
+      url: 'http://www.tse.com.tw/ch/trading/exchange/STOCK_DAY/STOCK_DAYMAIN.php',
+      formData: {
+        'query-button': '查詢',
+      }
     }
   }
 

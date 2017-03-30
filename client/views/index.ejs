@@ -1,24 +1,78 @@
 <% include header %>
 
-  <table>
-    <tr>
-      <td>營益分析表</td>
-      <td>https://finance-express.herokuapp.com/twse/mops?stockId=2330&year=102&type=big5</td>
-      <td>TYPEK=otc (上櫃)</td>
-    </tr>
-      <td>財務分析表</td>
-      <td>https://finance-express.herokuapp.com/twse/mops/financial?stockId=2330&year=102&type=big5</td>
-      <td>TYPEK=otc (上櫃)</td>
-   </tr>
-      <td>毛利率</td>
-      <td>https://finance-express.herokuapp.com/twse/mops/grossProfit?stockId=2330&year=102&type=big5</td>
-   </tr>
-      <td>存貨週轉率</td>
-      <td>https://finance-express.herokuapp.com/twse/mops/inventoryTurnover?stockId=2330&year=102&type=big5</td>
-   </tr>
-      <td>應收帳款週轉率</td>
-      <td>https://finance-express.herokuapp.com/twse/mops/averageCollectionTurnover?stockId=2330&year=102&type=big5</td>
-    </tr>
+<div class="container">
+  <h2>Tim哥交易所</h2>
+  <p>打折指數資料源.</p>
+  <p>作者: Tim哥</p>
+  <p>協作者: Bear大大</p>
+
+  <table class="table table-condensed table-hover">
+    <thead>
+      <tr>
+        <th>分類</th>
+        <th>功能</th>
+        <th>網址</th>
+        <th>參數說明</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr class="warning">
+        <td rowspan="5">財務報表</td>
+        <td>營益分析表</td>
+        <td>https://finance-express.herokuapp.com/twse/mops?stockId=2330&year=102&type=big5</td>
+        <td>
+          stockId=2330 (股票代碼) <br>
+          TYPEK=otc (股票是上櫃) <br>
+          type=j (j, big5, null) <br>
+        </td>
+      </tr>
+      <tr class="warning">
+        <td>財務分析表</td>
+        <td>https://finance-express.herokuapp.com/twse/mops/financial?stockId=2330&year=102&type=big5</td>
+        <td>
+          stockId=2330 (股票代碼) <br>
+          TYPEK=otc (股票是上櫃) <br>
+          type=j (j, big5, null) <br>
+        </td>
+      </tr>
+      <tr class="warning">
+        <td>毛利率</td>
+        <td>https://finance-express.herokuapp.com/twse/mops/grossProfit?stockId=2330&year=102&type=big5</td>
+        <td>
+          stockId=2330 (股票代碼) <br>
+          type=j (j, big5, null) <br>
+        </td>
+      </tr>
+      <tr class="warning">
+        <td>存貨週轉率</td>
+        <td>https://finance-express.herokuapp.com/twse/mops/inventoryTurnover?stockId=2330&year=102&type=big5</td>
+        <td>
+          stockId=2330 (股票代碼) <br>
+          type=j (j, big5, null) <br>
+        </td>
+      </tr>
+      <tr class="warning">
+        <td>應收帳款週轉率</td>
+        <td>https://finance-express.herokuapp.com/twse/mops/averageCollectionTurnover?stockId=2330&year=102&type=big5</td>
+        <td>
+          stockId=2330 (股票代碼) <br>
+          type=j (j, big5, null) <br>
+        </td>
+      </tr>
+
+      <tr class="info">
+        <td rowspan="1">個股</td>
+        <td>日成交資訊(月搜尋)</td>
+        <td>https://finance-express.herokuapp.com/twse/stockMonth?stockId=2330&year=2017&months=3&type=big5</td>
+        <td>
+          stockId=2330 (股票代碼) <br>
+          year=2017 (年) <br>
+          months=1,2,3 (月 可用逗點分割查詢複數月) <br>
+          type=j (j, big5, null) <br>
+        </td>
+      </tr>
+    </tbody>
   </table>
+</div>
 
 <% include footer %>
