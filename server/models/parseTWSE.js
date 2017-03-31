@@ -220,7 +220,7 @@ module.exports = function() {
     };
 
     // ************個股************
-    // 營益分析表
+    // 上市個股日成交資訊
     // http://www.tse.com.tw/ch/trading/exchange/STOCK_DAY/STOCK_DAYMAIN.php
     this.getStockMonth = function(CO_ID, query_year, query_month) {
       const query = {
@@ -251,6 +251,74 @@ module.exports = function() {
             r(json);
           }
         }]);
+      });
+    };
+
+    // 上櫃個股日成交資訊
+    // http://www.tpex.org.tw/web/stock/aftertrading/daily_trading_info/st43.php?l=zh-tw
+    this.getOTCStockMonth = function(CO_ID, query_year, query_month) {
+      const leftPad = (number, targetLength) => {
+        let output = number + '';
+
+        while (output.length < targetLength) {
+          output = '0' + output;
+        }
+        return output;
+      };
+      const numberWithCommas = (x) => {
+          return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+      }
+      const year = query_year - 1911;
+      const query = {
+        d: `${year}/${leftPad(query_month, 2)}/01`,
+        stkno: CO_ID,
+      };
+      const uri = this.TwseAPI.getTwseQueryAPI('OTCStockMonth', query);
+
+      return new Promise(r => {
+        this.c.queue({
+          uri,
+          method: 'GET',
+          callback: function (error, res, done) {
+            let json = [{
+              0: '日期',
+              1: '成交股數',
+              2: '成交金額',
+              3: '開盤價',
+              4: '最高價',
+              5: '最低價',
+              6: '收盤價',
+              7: '漲跌價差',
+              8: '成交筆數',
+            }];
+
+            if (!error) {
+              let data = JSON.parse(res.body);
+              data = data.aaData;
+              data.forEach((entry, i) => {
+                // 單位是成交千股
+                let stockNum = entry[1].replace(/,/g, '') * 1000;
+                // 單位是成交千元
+                let stockCost = entry[2].replace(/,/g, '') * 1000;
+
+                json.push({
+                  0: entry[0],
+                  1: numberWithCommas(stockNum),
+                  2: numberWithCommas(stockCost),
+                  3: entry[3],
+                  4: entry[4],
+                  5: entry[5],
+                  6: entry[6],
+                  7: entry[7],
+                  8: entry[8],
+                })
+              });
+            }
+
+            done();
+            r(json);
+          }
+        });
       });
     };
 };

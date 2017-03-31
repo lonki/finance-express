@@ -30,27 +30,40 @@ const handleStockMonth = async (req, res) => {
     year,
     months,
     type,
+    TYPEK,
   } = req.query;
 
   const monthsAry = months.split(",");
   const TWSE = new ParseTWSE();
+  const isOTC = TYPEK === 'otc';
   let result = [];
   const data = await Promise.all(monthsAry.map(async (month, index) => {
-    let json = await TWSE.getStockMonth(stockId, year, month);
+    let json = {};
 
-    if (index === 0) {
-      json.splice(0, 1);
+    if (isOTC) {
+      json = await TWSE.getOTCStockMonth(stockId, year, month);
+
+      if (index > 0) {
+        json.splice(0, 1);
+      }
     } else {
-      json.splice(0, 2);
+      json = await TWSE.getStockMonth(stockId, year, month);
+
+      if (index === 0) {
+        json.splice(0, 1);
+      } else {
+        json.splice(0, 2);
+      }
     }
+
     return json;
   }));
 
   data.forEach((entry, i) => {
-    result = result.concat(result, entry);
+    result = result.concat(entry);
   });
 
-  const fileName = `stock_${stockId}_${year}_${monthsAry.join('-')}`;
+  const fileName = `stock_${(isOTC)?'otc':'ssi'}_${stockId}_${year}_${monthsAry.join('-')}`;
 
   handleResponse(result, res, type, fileName);
 };

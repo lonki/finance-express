@@ -93,12 +93,20 @@ module.exports = function () {
       formData: {
         'query-button': '查詢',
       }
-    }
+    },
+    OTCStockMonth: (params) => {
+      const { d, stkno } = params;
+      return `http://www.tpex.org.tw/web/stock/aftertrading/daily_trading_info/st43_result.php?l=zh-tw&d=${d}&stkno=${stkno}`;
+    },
   }
 
   this.getTwseAPI = function (type, req){
     let formData = Settings[type];
     formData.formData = { ...formData.formData, ...req };
     return formData;
+  }
+
+  this.getTwseQueryAPI = function (type, req){
+    return Settings[type](req);
   }
 };
