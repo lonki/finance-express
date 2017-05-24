@@ -221,30 +221,64 @@ module.exports = function() {
 
     // ************個股************
     // 上市個股日成交資訊
-    // http://www.tse.com.tw/ch/trading/exchange/STOCK_DAY/STOCK_DAYMAIN.php
+    // http://www.tse.com.tw/zh/page/trading/exchange/STOCK_DAY.html
     this.getStockMonth = function(CO_ID, query_year, query_month) {
-      const query = {
-        query_year,
-        query_month,
-        CO_ID,
+      const leftPad = (number, targetLength) => {
+        let output = number + '';
+
+        while (output.length < targetLength) {
+          output = '0' + output;
+        }
+        return output;
       };
-      const mopsAPI = this.TwseAPI.getTwseAPI('StockMonth', query);
+      const numberWithCommas = (x) => {
+          return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+      }
+      const query = {
+        date: `${query_year}${leftPad(query_month, 2)}01`,
+        stockNo: CO_ID,
+      };
+      const uri = this.TwseAPI.getTwseQueryAPI('StockMonth', query);
 
       return new Promise(r => {
         this.c.queue([{
-          uri: mopsAPI.url,
-          method: 'POST',
-          headers: {
-            'content-type': 'application/x-www-form-urlencoded'
-          },
-          form: mopsAPI.formData,
+          uri,
+          method: 'GET',
           callback: function (error, res, done) {
-            let json = {};
-
+            let json = [];
             if (!error) {
-              const $ = res.$;
-              const table = $("table").eq(0);
-              json = processTableHtmlToJson($, table);
+              let jsonData = JSON.parse(res.body);
+              const { fields, data } = jsonData;
+              json.push({
+                0: '日期',
+                1: '成交股數',
+                2: '成交金額',
+                3: '開盤價',
+                4: '最高價',
+                5: '最低價',
+                6: '收盤價',
+                7: '漲跌價差',
+                8: '成交筆數',
+              });
+
+              data.forEach((entry, i) => {
+                // 單位是成交千股
+                let stockNum = entry[1].replace(/,/g, '') * 1000;
+                // 單位是成交千元
+                let stockCost = entry[2].replace(/,/g, '') * 1000;
+
+                json.push({
+                  0: entry[0],
+                  1: numberWithCommas(stockNum),
+                  2: numberWithCommas(stockCost),
+                  3: entry[3],
+                  4: entry[4],
+                  5: entry[5],
+                  6: entry[6],
+                  7: entry[7],
+                  8: entry[8],
+                })
+              });
             }
 
             done();

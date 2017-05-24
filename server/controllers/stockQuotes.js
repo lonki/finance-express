@@ -42,18 +42,12 @@ const handleStockMonth = async (req, res) => {
 
     if (isOTC) {
       json = await TWSE.getOTCStockMonth(stockId, year, month);
-
-      if (index > 0) {
-        json.splice(0, 1);
-      }
     } else {
       json = await TWSE.getStockMonth(stockId, year, month);
+    }
 
-      if (index === 0) {
-        json.splice(0, 1);
-      } else {
-        json.splice(0, 2);
-      }
+    if (index > 0) {
+      json.splice(0, 1);
     }
 
     return json;

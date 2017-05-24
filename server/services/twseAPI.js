@@ -88,11 +88,9 @@ module.exports = function () {
         isnew : false,
       }
     },
-    StockMonth: {
-      url: 'http://www.tse.com.tw/ch/trading/exchange/STOCK_DAY/STOCK_DAYMAIN.php',
-      formData: {
-        'query-button': '查詢',
-      }
+    StockMonth: (params) => {
+      const { date, stockNo } = params;
+      return `http://www.tse.com.tw/exchangeReport/STOCK_DAY?response=json&date=${date}&stockNo=${stockNo}`;
     },
     OTCStockMonth: (params) => {
       const { d, stkno } = params;
