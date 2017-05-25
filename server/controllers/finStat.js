@@ -5,7 +5,7 @@ var express = require('express'),
   csvbig5 = require('express-csv-big5'),
   nodeCache = require( "node-cache" );
 
-const cache = new nodeCache();
+const cache = new nodeCache({ stdTTL: 86400 });
 const asyncRequest = (asyncFn, req, res) =>
     asyncFn(req, res)
     .catch(e => res.status(500).json({message: e.message}));
@@ -111,7 +111,6 @@ const handleStatementOfComprehensiveIncome = async (req, res, next) => {
   if (cacheValue) {
     data = cacheValue;
   } else {
-    console.log('nocache');
     data = await Promise.all(season.map(async (q, index) => {
       const json = await TWSE.getStatementOfComprehensiveIncome(year, q, filter);
       return json;
