@@ -2,8 +2,10 @@ var express = require('express'),
   router = express.Router(),
   ParseTWSE = require('../models/parseTWSE'),
   csv = require('express-csv'),
-  csvbig5 = require('express-csv-big5');
+  csvbig5 = require('express-csv-big5'),
+  nodeCache = require( "node-cache" );
 
+const cache = new nodeCache();
 const asyncRequest = (asyncFn, req, res) =>
     asyncFn(req, res)
     .catch(e => res.status(500).json({message: e.message}));
@@ -91,6 +93,64 @@ const handleAverageCollection = async (req, res, next) => {
   handleResponse(json, res, type, fileName);
 }
 
+const handleStatementOfComprehensiveIncome = async (req, res, next) => {
+  const {
+    stocks,
+    year,
+    type,
+  } = req.query;
+  let result = new Map();
+  const TWSE = new ParseTWSE();
+  const stocksAry = stocks.split(",");
+  const filter = ['公司代號', '公司名稱', '每股參考淨值'];
+  const season = ['01', '02', '03', '04'];
+  const fileName = `mops_statement_comprehensive_income_${year}`;
+  const cacheKey = `StatementOfComprehensiveIncome_${year}`;
+  const cacheValue = cache.get(cacheKey);
+  let data = null;
+  if (cacheValue) {
+    data = cacheValue;
+  } else {
+    console.log('nocache');
+    data = await Promise.all(season.map(async (q, index) => {
+      const json = await TWSE.getStatementOfComprehensiveIncome(year, q, filter);
+      return json;
+    }));
+
+    cache.set(cacheKey, data);
+  }
+
+  if (data.length > 0) {
+    data.forEach((qData, i) => {
+      stocksAry.forEach((stock, i) => {
+        const findDataByStock = qData.find(item => item['0'] == stock);
+
+        if (!findDataByStock) {
+          return;
+        }
+
+        if (!result.has(stock)) {
+          findDataByStock['count'] = 1;
+          result.set(stock, findDataByStock);
+        } else {
+          const temp = result.get(stock);
+          temp['2'] = parseFloat(temp['2']) + parseFloat(findDataByStock['2']);
+          temp['count'] += 1;
+          result.set(stock, temp);
+        }
+      });
+    });
+  }
+
+  result = Array.from(result).reduce((obj, [key, value]) => {
+    value["2"] = value["2"] / value["count"];
+    obj[key] = value;
+    return obj;
+  }, {});
+
+  handleResponse(result, res, type, fileName);
+}
+
 /*
   /twse/mops
 */
@@ -103,6 +163,8 @@ router.get('/mops/grossProfit', asyncRequest.bind(null, handleGrossProfit));
 router.get('/mops/inventoryTurnover', asyncRequest.bind(null, handleInventory));
 
 router.get('/mops/averageCollectionTurnover', asyncRequest.bind(null, handleAverageCollection));
+
+router.get('/mops/statementOfComprehensiveIncome', asyncRequest.bind(null, handleStatementOfComprehensiveIncome));
 
 module.exports = function (app) {
   app.use('/twse', router);
