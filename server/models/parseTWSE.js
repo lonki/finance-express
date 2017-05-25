@@ -247,7 +247,49 @@ module.exports = function() {
       });
     };
 
-    //綜合損益表-拿每股淨值
+    //資產負債表-拿每股淨值
+    //http://mops.twse.com.tw/mops/web/t163sb05
+    this.getBalance = function(year, season, filter) {
+      const query = {
+        season,
+        year,
+      };
+
+      const balanceAPI = this.TwseAPI.getTwseAPI('Balance', query);
+
+      return new Promise(r => {
+        this.c.queue([{
+          uri: balanceAPI.url,
+          method: 'POST',
+          headers: {
+            'content-type': 'application/x-www-form-urlencoded'
+          },
+          form: balanceAPI.formData,
+          callback: function (error, res, done) {
+            let json = [];
+
+            if (!error) {
+              const $ = res.$;
+              for (let i=0; i < $("table").length; i++) {
+                if (i === 0) continue;
+
+                const table = $("table").eq(i);
+                const jsonData = processTableHtmlToJson($, table);
+                filterJson(filter, jsonData);
+                if (json.length > 0) {
+                  jsonData.splice(0, 1);
+                }
+                json = json.concat(jsonData);
+              }
+            }
+            done();
+            r(json);
+          }
+        }]);
+      });
+    };
+
+    //綜合損益表-拿EPS
     //http://mops.twse.com.tw/mops/web/t163sb04
     this.getStatementOfComprehensiveIncome = function(year, season, filter) {
       const query = {

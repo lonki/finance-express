@@ -93,7 +93,7 @@ const handleAverageCollection = async (req, res, next) => {
   handleResponse(json, res, type, fileName);
 }
 
-const handleStatementOfComprehensiveIncome = async (req, res, next) => {
+const handleBalance = async (req, res, next) => {
   const {
     stocks,
     year,
@@ -103,6 +103,63 @@ const handleStatementOfComprehensiveIncome = async (req, res, next) => {
   const TWSE = new ParseTWSE();
   const stocksAry = stocks.split(",");
   const filter = ['公司代號', '公司名稱', '每股參考淨值'];
+  const season = ['01', '02', '03', '04'];
+  const fileName = `mops_balance_${year}`;
+  const cacheKey = `balance_${year}`;
+  const cacheValue = cache.get(cacheKey);
+  let data = null;
+  if (cacheValue) {
+    data = cacheValue;
+  } else {
+    data = await Promise.all(season.map(async (q, index) => {
+      const json = await TWSE.getBalance(year, q, filter);
+      return json;
+    }));
+
+    cache.set(cacheKey, data);
+  }
+
+  if (data.length > 0) {
+    data.forEach((qData, i) => {
+      stocksAry.forEach((stock, i) => {
+        const findDataByStock = qData.find(item => item['0'] == stock);
+
+        if (!findDataByStock) {
+          return;
+        }
+
+        if (!result.has(stock)) {
+          findDataByStock['count'] = 1;
+          result.set(stock, findDataByStock);
+        } else {
+          const temp = result.get(stock);
+          temp['2'] = parseFloat(temp['2']) + parseFloat(findDataByStock['2']);
+          temp['count'] += 1;
+          result.set(stock, temp);
+        }
+      });
+    });
+  }
+
+  result = Array.from(result).reduce((obj, [key, value]) => {
+    value["2"] = value["2"] / value["count"];
+    obj[key] = value;
+    return obj;
+  }, {});
+
+  handleResponse(result, res, type, fileName);
+}
+
+const handleStatementOfComprehensiveIncome = async (req, res, next) => {
+  const {
+    stocks,
+    year,
+    type,
+  } = req.query;
+  let result = new Map();
+  const TWSE = new ParseTWSE();
+  const stocksAry = stocks.split(",");
+  const filter = ['公司代號', '公司名稱', '基本每股盈餘（元）'];
   const season = ['01', '02', '03', '04'];
   const fileName = `mops_statement_comprehensive_income_${year}`;
   const cacheKey = `StatementOfComprehensiveIncome_${year}`;
@@ -142,7 +199,6 @@ const handleStatementOfComprehensiveIncome = async (req, res, next) => {
   }
 
   result = Array.from(result).reduce((obj, [key, value]) => {
-    value["2"] = value["2"] / value["count"];
     obj[key] = value;
     return obj;
   }, {});
@@ -162,6 +218,8 @@ router.get('/mops/grossProfit', asyncRequest.bind(null, handleGrossProfit));
 router.get('/mops/inventoryTurnover', asyncRequest.bind(null, handleInventory));
 
 router.get('/mops/averageCollectionTurnover', asyncRequest.bind(null, handleAverageCollection));
+
+router.get('/mops/balance', asyncRequest.bind(null, handleBalance));
 
 router.get('/mops/statementOfComprehensiveIncome', asyncRequest.bind(null, handleStatementOfComprehensiveIncome));
 

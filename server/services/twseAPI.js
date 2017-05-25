@@ -88,8 +88,18 @@ module.exports = function () {
         isnew : false,
       }
     },
-    StatementOfComprehensiveIncome: {
+    Balance: {
       url: 'http://mops.twse.com.tw/mops/web/ajax_t163sb05',
+      formData: {
+        encodeURIComponent: 1,
+        step: 1,
+        firstin: 1,
+        off: 1,
+        TYPEK: 'sii',
+      }
+    },
+    StatementOfComprehensiveIncome: {
+      url: 'http://mops.twse.com.tw/mops/web/ajax_t163sb04',
       formData: {
         encodeURIComponent: 1,
         step: 1,
