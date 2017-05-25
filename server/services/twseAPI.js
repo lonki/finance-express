@@ -88,6 +88,16 @@ module.exports = function () {
         isnew : false,
       }
     },
+    StatementOfComprehensiveIncome: {
+      url: 'http://mops.twse.com.tw/mops/web/ajax_t163sb05',
+      formData: {
+        encodeURIComponent: 1,
+        step: 1,
+        firstin: 1,
+        off: 1,
+        TYPEK: 'sii',
+      }
+    },
     StockMonth: (params) => {
       const { date, stockNo } = params;
       return `http://www.tse.com.tw/exchangeReport/STOCK_DAY?response=json&date=${date}&stockNo=${stockNo}`;

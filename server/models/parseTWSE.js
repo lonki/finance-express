@@ -41,6 +41,34 @@ function processTableHtmlToJson($, table) {
   return json[0];
 }
 
+function filterJson(filter, json) {
+  let findIndexAry = [];
+
+  json.forEach((item, index) => {
+    if (index === 0) {
+      for (let [k, v] of Object.entries(item)) {
+        if (filter.includes(v)) {
+          findIndexAry.push(k);
+        }
+      }
+    }
+
+    Object.keys(item)
+    .filter(key => !findIndexAry.includes(key))
+    .forEach(key => delete item[key]);
+
+    Object.keys(item)
+    .forEach((key) => {
+      const index = findIndexAry.findIndex(k => k == key);
+
+      if (!(index in item)) {
+        item[index] = item[key];
+        delete item[key];
+      }
+    });
+  });
+}
+
 module.exports = function() {
     this.c = new Crawler({
       maxConnections : 10
@@ -211,6 +239,48 @@ module.exports = function() {
               var tableLength = $("table").length;
               var table = $("table").eq(tableLength - 1);
               json = processTableHtmlToJson($, table);
+            }
+            done();
+            r(json);
+          }
+        }]);
+      });
+    };
+
+    //綜合損益表-拿每股淨值
+    //http://mops.twse.com.tw/mops/web/t163sb04
+    this.getStatementOfComprehensiveIncome = function(year, season, filter) {
+      const query = {
+        season,
+        year,
+      };
+
+      const statementOfComprehensiveIncomeAPI = this.TwseAPI.getTwseAPI('StatementOfComprehensiveIncome', query);
+
+      return new Promise(r => {
+        this.c.queue([{
+          uri: statementOfComprehensiveIncomeAPI.url,
+          method: 'POST',
+          headers: {
+            'content-type': 'application/x-www-form-urlencoded'
+          },
+          form: statementOfComprehensiveIncomeAPI.formData,
+          callback: function (error, res, done) {
+            let json = [];
+
+            if (!error) {
+              const $ = res.$;
+              for (let i=0; i < $("table").length; i++) {
+                if (i === 0) continue;
+
+                const table = $("table").eq(i);
+                const jsonData = processTableHtmlToJson($, table);
+                filterJson(filter, jsonData);
+                if (json.length > 0) {
+                  jsonData.splice(0, 1);
+                }
+                json = json.concat(jsonData);
+              }
             }
             done();
             r(json);

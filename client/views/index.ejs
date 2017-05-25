@@ -17,7 +17,7 @@
     </thead>
     <tbody>
       <tr class="warning">
-        <td rowspan="5">財務報表</td>
+        <td rowspan="6">財務報表</td>
         <td>營益分析表</td>
         <td>https://finance-express.herokuapp.com/twse/mops?stockId=2330&year=102&type=utf8</td>
         <td>
@@ -56,6 +56,15 @@
         <td>https://finance-express.herokuapp.com/twse/mops/averageCollectionTurnover?stockId=2330&year=102&type=utf8</td>
         <td>
           stockId=2330 (股票代碼) <br>
+          type=j (j, big5, null) <br>
+        </td>
+      </tr>
+      <tr class="warning">
+        <td>綜合損益表-拿每股淨值</td>
+        <td>https://finance-express.herokuapp.com/mops/statementOfComprehensiveIncome?year=105&type=utf8&stocks=2330,2881,2498</td>
+        <td>
+          year=105 <br>
+          stocks=2330,2498 (股票代碼) <br>
           type=j (j, big5, null) <br>
         </td>
       </tr>
