@@ -5,7 +5,7 @@ var express = require('express'),
   csvbig5 = require('express-csv-big5'),
   nodeCache = require( "node-cache" );
 
-const cache = new nodeCache({ stdTTL: 86400 });
+const cache = new nodeCache({ stdTTL: 5000 });
 const asyncRequest = (asyncFn, req, res) =>
     asyncFn(req, res)
     .catch(e => res.status(500).json({message: e.message}));
