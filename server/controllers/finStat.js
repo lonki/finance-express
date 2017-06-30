@@ -121,31 +121,33 @@ const handleBalance = async (req, res, next) => {
 
   if (data.length > 0) {
     data.forEach((qData, i) => {
-      stocksAry.forEach((stock, i) => {
+      stocksAry.forEach((stock, j) => {
         const findDataByStock = qData.find(item => item['0'] == stock);
+        const q = `q${i + 1}`;
 
         if (!findDataByStock) {
           return;
         }
 
         if (!result.has(stock)) {
-          findDataByStock['count'] = 1;
+          findDataByStock[q] = findDataByStock['2'];
+          delete findDataByStock['2'];
           result.set(stock, findDataByStock);
         } else {
           const temp = result.get(stock);
-          temp['2'] = parseFloat(temp['2']) + parseFloat(findDataByStock['2']);
-          temp['count'] += 1;
+          temp[q] = findDataByStock['2'];
+          delete temp['2'];
           result.set(stock, temp);
         }
       });
     });
-  }
 
-  result = Array.from(result).reduce((obj, [key, value]) => {
-    value["2"] = value["2"] / value["count"];
-    obj[key] = value;
-    return obj;
-  }, {});
+    result = Array.from(result).reduce((obj, [key, value]) => {
+      obj[key] = value;
+      return obj;
+    }, {});
+
+  }
 
   handleResponse(result, res, type, fileName);
 }
@@ -178,20 +180,22 @@ const handleStatementOfComprehensiveIncome = async (req, res, next) => {
 
   if (data.length > 0) {
     data.forEach((qData, i) => {
-      stocksAry.forEach((stock, i) => {
+      stocksAry.forEach((stock, j) => {
         const findDataByStock = qData.find(item => item['0'] == stock);
+        const q = `q${i + 1}`;
 
         if (!findDataByStock) {
           return;
         }
 
         if (!result.has(stock)) {
-          findDataByStock['count'] = 1;
+          findDataByStock[q] = findDataByStock['2'];
+          delete findDataByStock['2'];
           result.set(stock, findDataByStock);
         } else {
           const temp = result.get(stock);
-          temp['2'] = parseFloat(temp['2']) + parseFloat(findDataByStock['2']);
-          temp['count'] += 1;
+          temp[q] = findDataByStock['2'];
+          delete temp['2'];
           result.set(stock, temp);
         }
       });
