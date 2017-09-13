@@ -12,7 +12,8 @@ module.exports = function(app, config, linebot) {
   var bot = linebot({
     channelId: config.lineBot.id,
     channelSecret: config.lineBot.secret,
-    channelAccessToken: config.lineBot.accessToken
+    channelAccessToken: config.lineBot.accessToken,
+    verify: config.lineBot.verify
   });
   var env = process.env.NODE_ENV || 'development';
   app.locals.ENV = env;
