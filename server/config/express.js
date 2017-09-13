@@ -44,7 +44,7 @@ module.exports = function(app, config, linebot) {
 
   var lineControllers = glob.sync(config.root + '/server/lineControllers/*.js');
   lineControllers.forEach(function (controller) {
-    require(controller)(bot);
+    require(controller)(app, bot);
   });
 
   app.use(function (req, res, next) {
