@@ -8,7 +8,12 @@ var bodyParser = require('body-parser');
 var compress = require('compression');
 var methodOverride = require('method-override');
 
-module.exports = function(app, config) {
+module.exports = function(app, config, linebot) {
+  var bot = linebot({
+    channelId: config.lineBot.id,
+    channelSecret: config.lineBot.secret,
+    channelAccessToken: config.lineBot.accessToken
+  });
   var env = process.env.NODE_ENV || 'development';
   app.locals.ENV = env;
   app.locals.ENV_DEVELOPMENT = env == 'development';
@@ -35,6 +40,11 @@ module.exports = function(app, config) {
   var controllers = glob.sync(config.root + '/server/controllers/*.js');
   controllers.forEach(function (controller) {
     require(controller)(app);
+  });
+
+  var lineControllers = glob.sync(config.root + '/server/lineControllers/*.js');
+  lineControllers.forEach(function (controller) {
+    require(controller)(bot);
   });
 
   app.use(function (req, res, next) {
