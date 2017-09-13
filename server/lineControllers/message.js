@@ -15,7 +15,7 @@ module.exports = function (app, bot) {
     }
   });
 
-  const linebotParser = bot.parser();
+  var linebotParser = bot.parser();
 
   app.post('/linewebhook', linebotParser);
 };

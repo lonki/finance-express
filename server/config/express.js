@@ -25,7 +25,11 @@ module.exports = function(app, config, linebot) {
 
   // app.use(favicon(config.root + '/public/img/favicon.ico'));
   app.use(logger('dev'));
-  app.use(bodyParser.json());
+  app.use(bodyParser.json({
+    verify: function (req, res, buf, encoding) {
+      req.rawBody = buf.toString(encoding);
+    }
+  }));
   app.use(bodyParser.urlencoded({
     extended: true
   }));
