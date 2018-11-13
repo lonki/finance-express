@@ -31,7 +31,21 @@ const handleLotto = async (req, res) => {
 
   const fileName = `big_lotto_${start}_${end}`;
   const Lotto = new parseLotto();
-  const json = await Lotto.getBigLotto(start, end);
+  const json = await Lotto.getLotto(start, end);
+  
+  handleResponse(json, res, type, fileName);
+};
+
+const handlePower = async (req, res) => {
+  const {
+    start,
+    end,
+    type,
+  } = req.query;
+
+  const fileName = `big_lotto_${start}_${end}`;
+  const Lotto = new parseLotto();
+  const json = await Lotto.getLotto(start, end, 2);
   
   handleResponse(json, res, type, fileName);
 };
@@ -41,6 +55,11 @@ const handleLotto = async (req, res) => {
   /lotto/big
 */
 router.get('/big', asyncRequest.bind(null, handleLotto));
+
+/*
+  /lotto/power
+*/
+router.get('/power', asyncRequest.bind(null, handlePower));
 
 module.exports = function (app) {
   app.use('/lotto', router);

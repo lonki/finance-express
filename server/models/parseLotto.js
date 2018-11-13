@@ -32,12 +32,13 @@ module.exports = function() {
       maxConnections : 10
     });
 
-    // ************大樂透************
+    // ************大樂透and威力彩************
     // http://www.9800.com.tw/trend.asp
-    this.getBigLotto = function(start, end) {
+    // type: 1:大樂透, 2:威力彩
+    this.getLotto = function(start, end, type = 1) {
       return new Promise(r => {
         this.c.queue([{
-          uri: `http://www.9800.com.tw/trend.asp?p1=${start}&p2=${end}&te=1&l=0&type=1`,
+          uri: `http://www.9800.com.tw/trend.asp?p1=${start}&p2=${end}&te=1&l=0&type=${type}`,
           method: 'GET',
           callback: function (error, res, done) {
             let json = {};
