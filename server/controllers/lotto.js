@@ -43,7 +43,7 @@ const handlePower = async (req, res) => {
     type,
   } = req.query;
 
-  const fileName = `big_lotto_${start}_${end}`;
+  const fileName = `power_lotto_${start}_${end}`;
   const Lotto = new parseLotto();
   const json = await Lotto.getLotto(start, end, 2);
   
